@@ -54,6 +54,37 @@ def maketxtfile():
         print('the file was already there')
     print(exceldocname)
     return exceldocname
+#this function either reads or creats a txt document and returns whatever text is in there in a string
+#if correction is True it forces you to overwerite your text document with something new
+#this is to stop the getxlsx() function from throwing errors
+def maketxtfile(correction = False):  
+    try:
+        textfile = open('excel.doc.name.here.txt', 'x')
+        
+        exceldocname = input('enter the name of your excel document: ')
+        
+        with textfile as textfile:
+            textfile.write(exceldocname)
+        print('I made the txt file for you and put in your excel doc name')
+        textfile.close()
+    except:
+        textfile = open('excel.doc.name.here.txt', 'r+')
+        
+        exceldocname = textfile.read()
+        textfile.close()
+        
+        if exceldocname == '' or correction == True:
+            textfile = open('excel.doc.name.here.txt', 'w')
+            exceldocname = input('enter the name of your excel document: ')
+            
+            with textfile as textfile:
+                textfile.write(exceldocname)
+        print('the file was already there')
+    
+    print(exceldocname)
+    return exceldocname
+
+
 def getxlsx(spreadsheet): #get the data from the spreadsheet and return it as a dataframe
     sheet = pd.ExcelFile(spreadsheet)
     worksheet = len(sheet.sheet_names)-1
@@ -63,6 +94,37 @@ def getxlsx(spreadsheet): #get the data from the spreadsheet and return it as a 
     print('length of the race data: ', len(racedata))
     print('-----------------------------')
     return racedata
+#get the data from the spreadsheet and return it as a dataframe. also handles improperly formatted text
+#by trying to add the extension for you and if that fales forces you to make a new file name
+#using the maketxtfile() function
+# def getxlsx(spreadsheet):
+#     loopvar = True
+#     easyfix = True 
+#     while loopvar == True:
+#         try:
+#             sheet = pd.ExcelFile(spreadsheet)
+#             loopvar = False
+#             easyfix = True
+#         except FileNotFoundError:
+#             if easyfix == False:
+#                 loopvar = False
+#             if easyfix == True:
+#                 spreadsheet += '.xlsx'
+#                 easyfix = False
+#         finally:
+#             if easyfix == False and loopvar == False:
+#                 print('that document ', spreadsheet, ' doesnt exist')
+#                 spreadsheet = maketxtfile(True)
+#                 loopvar = True
+#                 easyfix = True
+#         
+#     worksheet = len(sheet.sheet_names)-1
+#     
+#     racedata = pd.read_excel(spreadsheet, sheet_name = worksheet)
+#     print(racedata)
+#     print('length of the race data: ', len(racedata))
+#     print('-----------------------------')
+#     return racedata
 
 class Racer(object): #a way to store the pilots time and points with their name
     def __init__(self, name, roundtime, pointtotal):

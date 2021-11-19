@@ -1,0 +1,56 @@
+1- getxlname()
+	get excel file name using manually updated .txt file
+	return spreadsheetfile
+
+2- getxlsx(spreadsheetfile)
+	get data from last sheet in spreadsheet as dataframe
+	return racedata
+
+2- makeracers(racedata)
+     make dictionary full of Racer class objects
+	index = 0, 1, 2, 3, ...
+	return racerdic
+
+3- giveroundpoints(racersraw = racerdic)
+    give racers points for the round by using a racer class method
+	make racer workingdic w/ index = round time
+	make list of round times
+	sort the list of round times
+	update racers points using class method + round time list order
+	make rankeddic with racers in order w/ index = 0, 1, 2, ...
+	return (rankeddic, workingdic)
+	
+4- firstsort(racersupdated[0] = rankeddic)
+    sort the racers by their point totals + motocross rule
+	make a big list of tiny lists
+		tiny lists = [points, round time, name]
+	sort the unsorted big list by tinylist[points]
+		by some magic this does motocross rule for me
+		probably has to do with the input dic being in
+		the finishing order of the last round
+	return firstsortlist
+
+5- filalsort(sortedlist = firstsortlist, sorteddic = working dic)
+   make a new racerlist that has the racer objects in the correct order
+   for the next heat race
+	    sortedlist = the big list of tiny lists
+		tiny lists = [points, round time, name]
+		in the correct ranking order for the next round
+	    sorteddic = a dictionary of the racer objects
+		indexes = the race times from last round
+	make a new sortedpilotlist of length = sortedlist
+	    the first sortedpilotlist value = sorteddic value ->
+	    -> of index = to the first big list value's ->
+	    -> tinylist[roundtime]
+	return sortedpilotlist	
+
+6- make dataframe(finallist, testdoc = racedata)
+	turns finallist into a properly formatted dataframe
+	uses racedata to make the new dataframe for the round
+		after the last round
+	return newdataframe
+
+7- exporttoxl(newdataframe, testdoc = racedata, spreadsheetfile)
+	not 100% on how this actually works but a I managed to 
+	modify code from the internet so that it would work
+

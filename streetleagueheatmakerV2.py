@@ -96,15 +96,45 @@ def maketxtfile(correction = False):
 #         exceldocname = askopenfilename() # show an "Open" dialog box and return the path to the selected file
 #         print(filename)
 
-def getxlsx(spreadsheet): #get the data from the spreadsheet and return it as a dataframe
-    sheet = pd.ExcelFile(spreadsheet)
+# def getxlsx(spreadsheet): #get the data from the spreadsheet and return it as a dataframe
+#     sheet = pd.ExcelFile(spreadsheet)
+#     worksheet = len(sheet.sheet_names)-1
+#     
+#     racedata = pd.read_excel(spreadsheet, sheet_name = worksheet)
+#     print(racedata)
+#     print('length of the race data: ', len(racedata))
+#     print('-----------------------------')
+#     return racedata
+
+def getxlsx(spreadsheet):
+    loopvar = True
+    easyfix = True 
+    while loopvar == True:
+        try:
+            sheet = pd.ExcelFile(spreadsheet)
+            loopvar = False
+            easyfix = True
+        except FileNotFoundError:
+            if easyfix == False:
+                loopvar = False
+            if easyfix == True:
+                spreadsheet += '.xlsx'
+                easyfix = False
+        finally:
+            if easyfix == False and loopvar == False:
+                print('that document ', spreadsheet, ' doesnt exist')
+                spreadsheet = maketxtfile(True)
+                loopvar = True
+                easyfix = True
+        
     worksheet = len(sheet.sheet_names)-1
     
     racedata = pd.read_excel(spreadsheet, sheet_name = worksheet)
     print(racedata)
     print('length of the race data: ', len(racedata))
     print('-----------------------------')
-    return racedata
+    return (racedata, spreadsheet)
+
 
 class Racer(object): #a way to store the pilots time and points with their name
     def __init__(self, name, roundtime, pointtotal):

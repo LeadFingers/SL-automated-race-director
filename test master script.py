@@ -3,10 +3,10 @@ import streetleagueheatmakerV2 as street
 
 
 #exceldocname = street.maketxtfile()
-exceldocname = lead.maketxtfile()
+exceldocname = street.maketxtfile()
 
 #racedata = street.getxlsx(exceldocname)
-racedatatup = lead.getxlsx(exceldocname)
+racedatatup = street.getxlsx(exceldocname)
 
 racedata = racedatatup[0]
 

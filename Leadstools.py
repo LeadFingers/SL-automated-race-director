@@ -64,7 +64,7 @@ def maketxtfile(correction = False):
     print(exceldocname)
     return exceldocname
 
-getxlsx('thewrongname')
+#getxlsx('thewrongname')
 
 ########### This has been added to "streetleagueheatmakerV2"
 # #this function checks if there are times entered for the 'round times' and asks the user if they want to

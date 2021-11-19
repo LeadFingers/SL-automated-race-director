@@ -1,7 +1,8 @@
 import pandas as pd
 import openpyxl as pxl
 import Leadstools as lead
-
+from tkinter import Tk     # from tkinter import Tk for Python 3.x
+from tkinter.filedialog import askopenfilename
 
 
 # #spreadsheetfile = 'race.test.round.0.xlsx'
@@ -61,13 +62,18 @@ def maketxtfile(correction = False):
     try:
         textfile = open('excel.doc.name.here.txt', 'x')
         
-        exceldocname = input('enter the name of your excel document: ')
+        #old method
+        #exceldocname = input('enter the name of your excel document: ')
+        
+        #new method
+        Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
+        exceldocname = askopenfilename() # show an "Open" dialog box and return the path to the selected
         
         with textfile as textfile:
             textfile.write(exceldocname)
         print('I made the txt file for you and put in your excel doc name')
         textfile.close()
-    except:
+    except FileExistsError:
         textfile = open('excel.doc.name.here.txt', 'r+')
         
         exceldocname = textfile.read()
@@ -75,15 +81,29 @@ def maketxtfile(correction = False):
         
         if exceldocname == '' or correction == True:
             textfile = open('excel.doc.name.here.txt', 'w')
-            exceldocname = input('enter the name of your excel document: ')
+            #exceldocname = input('enter the name of your excel document: ')
+            Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
+            exceldocname = askopenfilename() # show an "Open" dialog box and return the path to the selected file
             
             with textfile as textfile:
                 textfile.write(exceldocname)
-        print('the file was already there')
+            print('the file was already there')
     
     print(exceldocname)
     return exceldocname
 
+# def maketxtfiledialog(correction = False):
+#     try:
+#         textfile = open('excel.doc.name.here.txt', 'x')
+#         
+#         with textfile as textfile:
+#             textfile.write(exceldocname)
+#         print('I made the txt file for you and put in your excel doc name')
+#         textfile.close()
+#     except:
+#         Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
+#         exceldocname = askopenfilename() # show an "Open" dialog box and return the path to the selected file
+#         print(filename)
 
 def getxlsx(spreadsheet): #get the data from the spreadsheet and return it as a dataframe
     sheet = pd.ExcelFile(spreadsheet)

@@ -12,6 +12,31 @@ import Leadstools as lead
 #         contents = txtfile.read()
 #         print(contents)
 #     return contents
+
+#this function checks if there are times entered for the 'round times' and asks the user if they want to
+#keep going or kill the script. running the script with no pilot times breaks things
+def checkfor0time(racedata):
+    
+    racertimelist = []
+    racertimes = True
+    missingtimelist = []
+    for row in range(len(racedata)):
+        if racedata.iloc[row]['round time'] == 0:
+            racertimes = False
+            missingtimelist.append(racedata.iloc[row]['pilot name'])
+    
+    if racertimes == False:
+        answer = ''
+        while answer !='y' or answer !='n': 
+            print('It looks like you forgot to enter times for', missingtimelist)
+            answer = input('having racer times of 0 can break the script, do you want to continue? y/n: ')
+            
+            if answer == 'n':
+                print('go fix your race times')
+                quit()
+            if answer == 'y':
+                return
+
 def maketxtfile():  
     try:
         textfile = open('excel.doc.name.here.txt', 'x')       

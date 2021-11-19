@@ -31,7 +31,7 @@ def getxlsx(spreadsheet):
     print(racedata)
     print('length of the race data: ', len(racedata))
     print('-----------------------------')
-    return racedata
+    return (racedata, spreadsheet)
 
 
 #this function either reads or creats a txt document and returns whatever text is in there in a string

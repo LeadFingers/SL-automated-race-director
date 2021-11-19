@@ -2,10 +2,15 @@ import Leadstools as lead
 import streetleagueheatmakerV2 as street
 
 
-exceldocname = street.maketxtfile()
+#exceldocname = street.maketxtfile()
+exceldocname = lead.maketxtfile()
 
-racedata = street.getxlsx(exceldocname)
-#racedata = lead.getxlsx(exceldocname)
+#racedata = street.getxlsx(exceldocname)
+racedatatup = lead.getxlsx(exceldocname)
+
+racedata = racedatatup[0]
+
+exceldocname = racedatatup[1]
 
 street.checkfor0time(racedata)
 

@@ -5,15 +5,6 @@ from tkinter import Tk     # from tkinter import Tk for Python 3.x
 from tkinter.filedialog import askopenfilename
 
 
-# #spreadsheetfile = 'race.test.round.0.xlsx'
-# def getxlname(): #gets the name of the excel doc that the race will be saved on by
-#     #accessing "excel.doc.name.here.txt" which must be saved in the same forlder as
-#     #the python script
-#     with open('excel.doc.name.here.txt') as txtfile:
-#         contents = txtfile.read()
-#         print(contents)
-#     return contents
-
 #this function checks if there are times entered for the 'round times' and asks the user if they want to
 #keep going or kill the script. running the script with no pilot times breaks things
 def checkfor0time(racedata):
@@ -114,37 +105,6 @@ def getxlsx(spreadsheet): #get the data from the spreadsheet and return it as a 
     print('length of the race data: ', len(racedata))
     print('-----------------------------')
     return racedata
-#get the data from the spreadsheet and return it as a dataframe. also handles improperly formatted text
-#by trying to add the extension for you and if that fales forces you to make a new file name
-#using the maketxtfile() function
-# def getxlsx(spreadsheet):
-#     loopvar = True
-#     easyfix = True 
-#     while loopvar == True:
-#         try:
-#             sheet = pd.ExcelFile(spreadsheet)
-#             loopvar = False
-#             easyfix = True
-#         except FileNotFoundError:
-#             if easyfix == False:
-#                 loopvar = False
-#             if easyfix == True:
-#                 spreadsheet += '.xlsx'
-#                 easyfix = False
-#         finally:
-#             if easyfix == False and loopvar == False:
-#                 print('that document ', spreadsheet, ' doesnt exist')
-#                 spreadsheet = maketxtfile(True)
-#                 loopvar = True
-#                 easyfix = True
-#         
-#     worksheet = len(sheet.sheet_names)-1
-#     
-#     racedata = pd.read_excel(spreadsheet, sheet_name = worksheet)
-#     print(racedata)
-#     print('length of the race data: ', len(racedata))
-#     print('-----------------------------')
-#     return racedata
 
 class Racer(object): #a way to store the pilots time and points with their name
     def __init__(self, name, roundtime, pointtotal):
@@ -262,22 +222,6 @@ def exporttoxl(newdataframe, testdoc, spreadsheetfile):
             for worksheet in excel_book.worksheets}
         newdataframe.to_excel(writer, newround, index = False)
         
-    
-    
-        
-# #main function
-# spreadsheetfile = getxlname()
-# racedata = getxlsx(spreadsheetfile) #get the dataframe
-# racersraw = makeracers(racedata) #make the dictionary full of racers
-# racersupdated = giveroundpoints(racersraw) #asigns the racers points for the round
-# racerssorted = firstsort(racersupdated[0]) #returns a list of list [[points, last round time, pilot name], ...]
-#                                             #in the order that the pilots are ranked, and does motocross rule
-# finallist = finalsort(racerssorted, racersupdated[1])
-# newdataframe = makedataframe(finallist, racedata)
-# 
-# exporttoxl(newdataframe,racedata, spreadsheetfile)
-
-
 
 
 

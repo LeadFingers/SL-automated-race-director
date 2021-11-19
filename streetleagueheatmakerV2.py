@@ -58,7 +58,8 @@ def maketxtfile(correction = False):
         
         #new method
         Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
-        exceldocname = askopenfilename() # show an "Open" dialog box and return the path to the selected
+        exceldocname = askopenfilename() # show an "Open" dialog box and return the path to the selected file
+        #exceldocname = lead.select_file()
         
         with textfile as textfile:
             textfile.write(exceldocname)
@@ -75,10 +76,15 @@ def maketxtfile(correction = False):
             #exceldocname = input('enter the name of your excel document: ')
             Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
             exceldocname = askopenfilename() # show an "Open" dialog box and return the path to the selected file
+            #exceldocname = lead.select_file()
             
             with textfile as textfile:
                 textfile.write(exceldocname)
             print('the file was already there')
+            
+    except:
+        print('File not found')
+        self.maketxtfile(False)
     
     print(exceldocname)
     return exceldocname
@@ -120,6 +126,8 @@ def getxlsx(spreadsheet):
             if easyfix == True:
                 spreadsheet += '.xlsx'
                 easyfix = False
+        except ValueError:
+            spreadsheet = maketxtfile(True)
         finally:
             if easyfix == False and loopvar == False:
                 print('that document ', spreadsheet, ' doesnt exist')

@@ -3,6 +3,7 @@
 import pandas as pd
 import openpyxl as pxl
 import Leadstools as lead
+import userinterface as gui
 import os
 from tkinter import Tk     # from tkinter import Tk for Python 3.x
 from tkinter.filedialog import askopenfilename
@@ -25,8 +26,17 @@ def checkfor0time(racedata, exceldocname):
     if racertimes == False:
         answer = ''
         while answer !='y' or answer !='n': 
-            print('It looks like you forgot to enter times for', missingtimelist)
-            answer = input('having racer times of 0 can break the script, do you want to continue? y/n: ')
+#             print('It looks like you forgot to enter times for', missingtimelist)
+#             answer = input('having racer times of 0 can break the script, do you want to continue? y/n: ')
+            
+            title = "WARNING!!!!!!!!!!  you're about to break shit"
+            label1 = 'It looks like you forgot to enter times for \n'
+            label2 = str(missingtimelist) + '\n'
+            label3 = 'having racer times of 0 can break the script \n'
+            label4 = 'do you want to continue? y/n:'
+            label = label1 + '\n' + label2 + '\n' + label3 + label4
+            
+            answer = gui.yesornowindow(label, title)
             
             if answer == 'n':
                 print('go fix your race times')
@@ -252,7 +262,8 @@ def makedataframe(finallist, testdoc):
     columns = ['round number','pilot name','old points', 'round points', 'point total', 'round time']
 
     for index in range(len(finallist)):
-        tinylist = [str(testdoc.at[0,'round number'] + 1), finallist[index].name, finallist[index].oldpoints, finallist[index].pointround, finallist[index].pointtotal, 0]
+        tinylist = [str(testdoc.at[0,'round number'] + 1), finallist[index].name,
+                    finallist[index].oldpoints, finallist[index].pointround, finallist[index].pointtotal, 0]
         data.append(tinylist)
 
     newdataframe = pd.DataFrame(data, columns = columns)

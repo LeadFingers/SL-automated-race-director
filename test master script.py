@@ -1,5 +1,6 @@
 import Leadstools as lead
 import streetleagueheatmakerV2 as street
+import os
 
 #branch test
 
@@ -13,7 +14,7 @@ racedata = racedatatup[0]
 
 exceldocname = racedatatup[1]
 
-street.checkfor0time(racedata)
+street.checkfor0time(racedata, exceldocname)
 
 racersraw = street.makeracers(racedata)
 
@@ -26,3 +27,5 @@ finallist = street.finalsort(racerssorted, racersupdated[1])
 newdataframe = street.makedataframe(finallist, racedata)
 
 street.exporttoxl(newdataframe, racedata, exceldocname)
+
+os.startfile(exceldocname)

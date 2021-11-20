@@ -1,14 +1,16 @@
 import pandas as pd
 import openpyxl as pxl
 import Leadstools as lead
+import os
 from tkinter import Tk     # from tkinter import Tk for Python 3.x
 from tkinter.filedialog import askopenfilename
+
 
 #branch test
 
 #this function checks if there are times entered for the 'round times' and asks the user if they want to
 #keep going or kill the script. running the script with no pilot times breaks things
-def checkfor0time(racedata):
+def checkfor0time(racedata, exceldocname):
     
     racertimelist = []
     racertimes = True
@@ -26,6 +28,7 @@ def checkfor0time(racedata):
             
             if answer == 'n':
                 print('go fix your race times')
+                os.startfile(exceldocname)
                 quit()
             if answer == 'y':
                 return
@@ -261,6 +264,8 @@ def exporttoxl(newdataframe, testdoc, spreadsheetfile):
     newround = 'round number ' + str(testdoc.at[0,'round number'] + 1)
     
     #testdoc.to_excel(spreadsheetfile, 'round 1', index = False)
+    
+    #if we can save and force the file closed if the window is currently open here that would be dope as fuuuuuuuuuck
     
     excel_book = pxl.load_workbook(spreadsheetfile)
     with pd.ExcelWriter(spreadsheetfile, engine = 'openpyxl') as writer:

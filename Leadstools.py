@@ -2,6 +2,7 @@ import pandas as pd
 import openpyxl as pxl
 
 
+
 # make all of the racer objects from the spreadsheet dataframe
 # outputs a dictionary with indexes 0 -> num of racers -1
 # the values are Racer class objects
@@ -98,6 +99,7 @@ def exporttoxl(newdataframe, testdoc, spreadsheetfile):
             worksheet.title: worksheet
             for worksheet in excel_book.worksheets}
         newdataframe.to_excel(writer, newround, index = False)
+
 
 
 #get the data from the spreadsheet and return it as a dataframe. also handles improperly formatted text

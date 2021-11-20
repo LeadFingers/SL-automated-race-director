@@ -4,6 +4,8 @@ import Leadstools as lead
 from tkinter import Tk     # from tkinter import Tk for Python 3.x
 from tkinter.filedialog import askopenfilename
 
+#branch test
+
 #this function checks if there are times entered for the 'round times' and asks the user if they want to
 #keep going or kill the script. running the script with no pilot times breaks things
 def checkfor0time(racedata):
@@ -114,6 +116,8 @@ class Racer(object):
         self.pointtotal = pointtotal
         self.racerank = 0
         self.howmanypilots = 0
+        self.oldpoints = 0
+
 
     def givepointround(self, rank): #allows you to change the points the pilot earned
         self.pointround += rank
@@ -122,6 +126,7 @@ class Racer(object):
         self.pointround = howmany - (rank-1)
 
     def newrank(self): #updates the point total by adding it to the pilots rank
+        self.oldpoints = self.pointtotal
         self.pointtotal += self.pointround
     
 # make all of the racer objects from the spreadsheet dataframe
@@ -239,10 +244,10 @@ def finalsort(sortedlist, sorteddic):
 #turns the final list into a properly formatted dataframe
 def makedataframe(finallist, testdoc):
     data = []
-    columns = ['round number','pilot name', 'point total', 'round time']
+    columns = ['round number','pilot name','old points', 'round points', 'point total', 'round time']
 
     for index in range(len(finallist)):
-        tinylist = [str(testdoc.at[0,'round number'] + 1), finallist[index].name, finallist[index].pointtotal, 0]
+        tinylist = [str(testdoc.at[0,'round number'] + 1), finallist[index].name, finallist[index].oldpoints, finallist[index].pointround, finallist[index].pointtotal, 0]
         data.append(tinylist)
 
     newdataframe = pd.DataFrame(data, columns = columns)

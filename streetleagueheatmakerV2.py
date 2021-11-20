@@ -107,15 +107,19 @@ def getxlsx(spreadsheet):
 
 # a way to store the racers information
 class Racer(object): 
-    def __init__(self, name, roundtime, pointtotal):
+    def __init__(self, name, roundtime, pointtotal, howmanypilots = 0):
         self.name = name
         self.roundtime = roundtime
         self.pointround = 0
         self.pointtotal = pointtotal
         self.racerank = 0
+        self.howmanypilots = 0
 
     def givepointround(self, rank): #allows you to change the points the pilot earned
         self.pointround += rank
+        
+    def giveroundpointsrank(self, rank, howmany):
+        self.pointround = howmany - (rank-1)
 
     def newrank(self): #updates the point total by adding it to the pilots rank
         self.pointtotal += self.pointround
@@ -139,6 +143,38 @@ def makeracers(racedata):
 # asigns them points and updates the pilot object. returns the updated racers in
 #the order they finished the last round in index [0]. and a dic with index of their
 #round time in index [1]
+# def giveroundpoints(racersraw):
+#     workingdic = {}
+#     workinglist = []
+#     rankeddic = {}
+# 
+#     for row in range(len(racersraw)):
+#         #make racer dic with index = roundtime
+#         workingdic[racersraw[row].roundtime] = racersraw[row]
+#         #make a list of the index's 
+#         workinglist.append(racersraw[row].roundtime)
+#         
+#     #sort the list of inexes
+#     workinglist.sort()
+#     print(workinglist)
+# 
+#     for index in range(len(workinglist)):
+# 
+#         rank = index+1
+#         #update the Racer object with points for the round
+#         workingdic[workinglist[index]].givepointround(rank)
+#         #update the point total with the points from the round
+#         workingdic[workinglist[index]].newrank()
+#         #put the racers in order into the new dictionary
+#         rankeddic[index] = workingdic[workinglist[index]]
+# 
+#     for row in range(len(rankeddic)):
+#         print(rankeddic[row].name,rankeddic[row].roundtime,
+#               rankeddic[row].pointround, rankeddic[row].pointtotal)
+#     print('-----------------------------------------')
+# 
+#     return (rankeddic, workingdic)
+
 def giveroundpoints(racersraw):
     workingdic = {}
     workinglist = []
@@ -158,7 +194,7 @@ def giveroundpoints(racersraw):
 
         rank = index+1
         #update the Racer object with points for the round
-        workingdic[workinglist[index]].givepointround(rank)
+        workingdic[workinglist[index]].giveroundpointsrank(rank, len(workinglist))
         #update the point total with the points from the round
         workingdic[workinglist[index]].newrank()
         #put the racers in order into the new dictionary
@@ -183,7 +219,7 @@ def firstsort(racersupdated):
         tinylist.append(racersupdated[pilot].name)
         unsortedlist.append(tinylist)  
     #print(unsortedlist)
-    firstsortlist = sorted(unsortedlist, key = lambda x: x[0])
+    firstsortlist = sorted(unsortedlist, key = lambda x: x[0], reverse = True)
     #print(firstsortlist)
     
     return firstsortlist

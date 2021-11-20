@@ -4,7 +4,6 @@ import Leadstools as lead
 from tkinter import Tk     # from tkinter import Tk for Python 3.x
 from tkinter.filedialog import askopenfilename
 
-
 #this function checks if there are times entered for the 'round times' and asks the user if they want to
 #keep going or kill the script. running the script with no pilot times breaks things
 def checkfor0time(racedata):
@@ -29,23 +28,6 @@ def checkfor0time(racedata):
             if answer == 'y':
                 return
 
-def maketxtfile():  
-    try:
-        textfile = open('excel.doc.name.here.txt', 'x')       
-        exceldocname = input('enter the name of your excel document: ')       
-        with textfile as textfile:
-            textfile.write(exceldocname)
-        print('I made the txt file for you and put in your excel doc name')
-    except:
-        textfile = open('excel.doc.name.here.txt', 'r+')     
-        exceldocname = textfile.read()        
-        if exceldocname == '':
-            exceldocname = input('enter the name of your excel document: ')         
-            with textfile as textfile:
-                textfile.write(exceldocname)
-        print('the file was already there')
-    print(exceldocname)
-    return exceldocname
 #this function either reads or creats a txt document and returns whatever text is in there in a string
 #if correction is True it forces you to overwerite your text document with something new
 #this is to stop the getxlsx() function from throwing errors
@@ -89,29 +71,9 @@ def maketxtfile(correction = False):
     print(exceldocname)
     return exceldocname
 
-# def maketxtfiledialog(correction = False):
-#     try:
-#         textfile = open('excel.doc.name.here.txt', 'x')
-#         
-#         with textfile as textfile:
-#             textfile.write(exceldocname)
-#         print('I made the txt file for you and put in your excel doc name')
-#         textfile.close()
-#     except:
-#         Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
-#         exceldocname = askopenfilename() # show an "Open" dialog box and return the path to the selected file
-#         print(filename)
-
-# def getxlsx(spreadsheet): #get the data from the spreadsheet and return it as a dataframe
-#     sheet = pd.ExcelFile(spreadsheet)
-#     worksheet = len(sheet.sheet_names)-1
-#     
-#     racedata = pd.read_excel(spreadsheet, sheet_name = worksheet)
-#     print(racedata)
-#     print('length of the race data: ', len(racedata))
-#     print('-----------------------------')
-#     return racedata
-
+#get the data from the spreadsheet and return it as a dataframe. also handles improperly formatted text
+#by trying to add the extension for you and if that fales forces you to make a new file name
+#using the maketxtfile() function
 def getxlsx(spreadsheet):
     loopvar = True
     easyfix = True 
@@ -143,8 +105,8 @@ def getxlsx(spreadsheet):
     print('-----------------------------')
     return (racedata, spreadsheet)
 
-
-class Racer(object): #a way to store the pilots time and points with their name
+# a way to store the racers information
+class Racer(object): 
     def __init__(self, name, roundtime, pointtotal):
         self.name = name
         self.roundtime = roundtime
@@ -158,9 +120,10 @@ class Racer(object): #a way to store the pilots time and points with their name
     def newrank(self): #updates the point total by adding it to the pilots rank
         self.pointtotal += self.pointround
     
-def makeracers(racedata): # make all of the racer objects from the spreadsheet dataframe
-                                                        # outputs a dictionary with indexes 0 -> num of racers -1
-                                                        # the values are Racer class objects
+# make all of the racer objects from the spreadsheet dataframe
+# outputs a dictionary with indexes 0 -> num of racers -1
+# the values are Racer class objects
+def makeracers(racedata): 
     print('there are ', len(racedata), ' racers')
     racerdic = {}
     for row in range(len(racedata)):
@@ -172,9 +135,11 @@ def makeracers(racedata): # make all of the racer objects from the spreadsheet d
     print('--------------------------------')
     return racerdic
 
-def giveroundpoints(racersraw): #takes all the raw racer data (dic) from the last round and
+#takes all the raw racer data (dic) from the last round and
 # asigns them points and updates the pilot object. returns the updated racers in
-#the order they finished the last round in index [0]. and 
+#the order they finished the last round in index [0]. and a dic with index of their
+#round time in index [1]
+def giveroundpoints(racersraw):
     workingdic = {}
     workinglist = []
     rankeddic = {}
@@ -206,9 +171,10 @@ def giveroundpoints(racersraw): #takes all the raw racer data (dic) from the las
 
     return (rankeddic, workingdic)
 
-def firstsort(racersupdated): #this function will sort the racers by their point
-    #totals and deal with point ties by happenstance and magic. probably has to do
-    #with them starting in the order of best finish in the last round
+#this function will sort the racers by their point
+#totals and deal with point ties by happenstance and magic. probably has to do
+#with them starting in the order of best finish in the last round
+def firstsort(racersupdated): 
     unsortedlist = []   
     for pilot in racersupdated:
         tinylist = []
@@ -222,17 +188,19 @@ def firstsort(racersupdated): #this function will sort the racers by their point
     
     return firstsortlist
 
-def finalsort(sortedlist, sorteddic):#this function takes a list of lists [[points, last round time, pilot name], ...] 
+#this function takes a list of lists [[points, last round time, pilot name], ...] 
 #that is correctly ordered in the pilots race ranking from 1st [0] to last and a dictionary
 #containing the pilot objects indexed by their last round time and returns
 # a list of pilot objects in the correct ranking order
+def finalsort(sortedlist, sorteddic):
 
     sortedpilotlist = []
     for index1 in range(len(sortedlist)):
         sortedpilotlist.append(sorteddic[sortedlist[index1][1]])
         print(sortedpilotlist[index1].name, sortedpilotlist[index1].pointtotal, sortedpilotlist[index1].roundtime)
     return sortedpilotlist
-    
+
+#turns the final list into a properly formatted dataframe
 def makedataframe(finallist, testdoc):
     data = []
     columns = ['round number','pilot name', 'point total', 'round time']
@@ -245,7 +213,8 @@ def makedataframe(finallist, testdoc):
     print(newdataframe)
 
     return newdataframe
-        
+ 
+#exports the properly formated dataframe to the next sheet on the selected excel doc
 def exporttoxl(newdataframe, testdoc, spreadsheetfile):
     
     newround = 'round number ' + str(testdoc.at[0,'round number'] + 1)

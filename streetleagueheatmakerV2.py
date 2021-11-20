@@ -1,3 +1,5 @@
+#if you can figure out how to save and force close an open excel window, please goto line 270 and do that
+
 import pandas as pd
 import openpyxl as pxl
 import Leadstools as lead

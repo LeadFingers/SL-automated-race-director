@@ -1,6 +1,8 @@
 you need the most recent python as of 11/2021
 you need the "pandas" plug-in
 you need the "openpyxl" plug in
+you need the "tkinter" plug in
+	use "pip install tk"
 
 How to use:
 1-

@@ -3,30 +3,41 @@ import streetleagueheatmakerV2 as street
 import userinterface as gui
 import os
 
-#branch test
+runvar = True
 
-#exceldocname = street.maketxtfile()
-exceldocname = street.maketxtfile()
+while(runvar):
+    gobutton = True
 
-#racedata = street.getxlsx(exceldocname)
-racedatatup = street.getxlsx(exceldocname)
+    #exceldocname = street.maketxtfile()
+    exceldocname = street.maketxtfile()
 
-racedata = racedatatup[0]
+    #racedata = street.getxlsx(exceldocname)
+    racedatatup = street.getxlsx(exceldocname)
 
-exceldocname = racedatatup[1]
+    racedata = racedatatup[0]
 
-street.checkfor0time(racedata, exceldocname)
+    exceldocname = racedatatup[1]
 
-racersraw = street.makeracers(racedata)
+    zerotime = street.checkfor0time(racedata, exceldocname)
 
-racersupdated = street.giveroundpoints(racersraw)
+    if zerotime == True:
+        racersraw = street.makeracers(racedata)
 
-racerssorted = street.firstsort(racersupdated[0])
+        racersupdated = street.giveroundpoints(racersraw)
 
-finallist = street.finalsort(racerssorted, racersupdated[1])
+        racerssorted = street.firstsort(racersupdated[0])
 
-newdataframe = street.makedataframe(finallist, racedata)
+        finallist = street.finalsort(racerssorted, racersupdated[1])
 
-street.exporttoxl(newdataframe, racedata, exceldocname)
+        newdataframe = street.makedataframe(finallist, racedata)
 
-os.startfile(exceldocname)
+        street.exporttoxl(newdataframe, racedata, exceldocname)
+
+    os.startfile(exceldocname)
+
+    while(gobutton):
+        loopvar = gui.biggobutton(gobutton, runvar)
+        gobutton = loopvar[0]
+        runvar = loopvar[1]
+        if runvar == False:
+            gobutton = False

@@ -46,9 +46,9 @@ def biggobutton(gobuttonstate = True, closeprogramstate = True):
 
     #Create a Button to validate Entry Widget
     tk.Button(win, text= "GO",width= 10, height= 5, font=("Courier 20 bold"), command=
-              lambda:[gobuttonpress(), win.destroy()]).pack(padx = 20, pady = 100)
+                lambda:[gobuttonpress(), win.destroy()]).pack(padx = 20, pady = 100)
     tk.Button(win, text= "close program",width= 20, command=
-              lambda:[closeprogram(), win.destroy()]).pack(pady = 150,)
+                lambda:[closeprogram(), win.destroy()]).pack(pady = 150,)
 
 
     win.mainloop()

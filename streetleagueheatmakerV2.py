@@ -41,10 +41,12 @@ def checkfor0time(racedata, exceldocname):
             if answer == 'n':
                 print('go fix your race times')
                 os.startfile(exceldocname)
-                quit()
+                #quit()
+                return False
             if answer == 'y':
-                return
-
+                return True
+    else:
+        return True
 #this function either reads or creats a txt document and returns whatever text is in there in a string
 #if correction is True it forces you to overwerite your text document with something new
 #this is to stop the getxlsx() function from throwing errors

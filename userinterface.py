@@ -1,6 +1,9 @@
 import tkinter as tk
 
 
+
+
+
 def biggobutton(gobuttonstate = True, closeprogramstate = True):
     
     # this class is just for getting info out of the button
@@ -30,25 +33,30 @@ def biggobutton(gobuttonstate = True, closeprogramstate = True):
     win= tk.Tk()
     
     #Set the geometry of Tkinter frame
-    win.geometry("1000x750")
+    win.geometry("1280x720")
     
     #set window color
-    win.configure(bg='dark grey')
+    #win.configure(bg='dark grey')
     
     #set the window title
     title = 'Street League automated race director'
     win.title(title)
+    
+    #import the background image
+    background = tk.PhotoImage( file= "images/background.png")
 
     #Initialize a Label to display the User Input
+    mylabel = tk.Label(win, image = background)
+    mylabel.place(x=0, y=0, relwidth = 1, relheight = 1)
     label = 'Press the big button to generate the next round'
-    label= tk.Label(win, text=label, font=("Courier 20 bold"), background = "dark grey")
+    label= tk.Label(win, text=label, font=("Courier 20 bold"), background = '#1d1d1d', fg = 'light gray')
     label.pack()
 
     #Create a Button to validate Entry Widget
-    tk.Button(win, text= "GO",width= 10, height= 5, font=("Courier 20 bold"), command=
+    tk.Button(win, text= "Generate",width= 10, height= 5, font=("Courier 20 bold"), command=
                 lambda:[gobuttonpress(), win.destroy()]).pack(padx = 20, pady = 100)
-    tk.Button(win, text= "close program",width= 20, command=
-                lambda:[closeprogram(), win.destroy()]).pack(pady = 150,)
+    tk.Button(win, text= "close program",width= 20, height = 2, command=
+                lambda:[closeprogram(), win.destroy()]).pack(pady = 100,)
 
 
     win.mainloop()
@@ -64,7 +72,7 @@ def biggobutton(gobuttonstate = True, closeprogramstate = True):
 #     print('---------------------')
 #
 
-def yesornowindow(label = '', title = ''):
+def yesornowindow(label1 = '', label2 = '' ,pilotnames = [''],  title = ''):
     
     # this class is just for getting info out of the button
     class Buttonoutput(object):
@@ -90,21 +98,49 @@ def yesornowindow(label = '', title = ''):
     win.geometry("750x250")
     
     #set window color
-    win.configure(bg='light grey')
+    #win.configure(bg='light grey')
     
     #set the window title
     win.title(title)
 
-    #Initialize a Label to display the User Input
-    label= tk.Label(win, text=label, font=("Courier 10 bold"), background = 'light grey')
-    label.pack()
-
-    #Create a Button to validate Entry Widget
-    tk.Button(win, text= "Yes",width= 20, command=
-              lambda:[clickyes(), win.destroy()]).pack(padx = 100, side = 'left')
-    tk.Button(win, text= "No",width= 20, command=
-              lambda:[clickno(), win.destroy()]).pack(padx = 100, side = 'right')
-      
+    #import the background image
+    background = tk.PhotoImage( file= "images/error.png")
+    
+    #create canvas
+    width = 750
+    height = 250
+    mycanvas = tk.Canvas(win, width = width, height = height)
+    mycanvas.pack(fill = 'both', expand = True)
+    
+    #set image in canvas
+    mycanvas.create_image(0,0, image = background, anchor = 'nw')
+    
+    #add a label
+    mycanvas.create_text(width/2, height/8, text = label1, font=("Arial 12 bold"), fill = 'light gray')
+    mycanvas.create_text(width/2, height/4, text = label2, font=("Arial 12 bold"), fill = 'light gray')
+    mycanvas.create_text(width/2, height/5, text = pilotnames, font=("Courier 8"), fill = 'light gray')
+    
+    #add buttons
+    button1 = tk.Button(win, text= "Yes",width= 20, command=
+              lambda:[clickyes(), win.destroy()])
+    button2 = tk.Button(win, text= "No",width= 20, command=
+              lambda:[clickno(), win.destroy()])
+    
+    button1window = mycanvas.create_window(width/5, height*2/3, anchor = 'nw', window = button1)
+    button2window = mycanvas.create_window(width*3/5, height*2/3, anchor = 'nw', window = button2)
+    
+#     #Initialize a Label to display the User Input
+#     mylabel = tk.Label(win, image = background)
+#     mylabel.place(x=0, y=0, relwidth = 1, relheight = 1)
+#     mytext = tk.Label(win, text=label, font=("Courier 10 bold"), background = '#1d1d1d', fg = 'light gray')
+#     mytext.pack()
+# 
+#     #Create a Button to validate Entry Widget
+#     tk.Button(win, text= "Yes",width= 20, command=
+#               lambda:[clickyes(), win.destroy()]).pack(padx = 100, side = 'left')
+#     tk.Button(win, text= "No",width= 20, command=
+#               lambda:[clickno(), win.destroy()]).pack(padx = 100, side = 'right')
+ 
     win.mainloop()
     
     return buttonanswer.yesorno

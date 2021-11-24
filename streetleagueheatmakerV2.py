@@ -2,7 +2,7 @@
 
 import pandas as pd
 import openpyxl as pxl
-import Leadstools as lead
+#import Leadstools as lead
 import userinterface as gui
 import os
 from tkinter import Tk     # from tkinter import Tk for Python 3.x
@@ -30,13 +30,14 @@ def checkfor0time(racedata, exceldocname):
 #             answer = input('having racer times of 0 can break the script, do you want to continue? y/n: ')
             
             title = "WARNING!!!!!!!!!!  you're about to break shit"
-            label1 = 'It looks like you forgot to enter times for \n'
-            label2 = str(missingtimelist) + '\n'
-            label3 = 'having racer times of 0 can break the script \n'
-            label4 = 'do you want to continue? y/n:'
-            label = label1 + '\n' + label2 + '\n' + label3 + label4
+            label1 = 'It looks like you forgot to enter times for the following racers: \n'
+            label3 = 'Having racer times of 0 can break the script, '
+            label4 = 'do you want to continue?'
+            label2 = label3 + label4
             
-            answer = gui.yesornowindow(label, title)
+            pilotnames = str(missingtimelist) + '\n'
+            
+            answer = gui.yesornowindow(label1, label2, pilotnames, title)
             
             if answer == 'n':
                 print('go fix your race times')

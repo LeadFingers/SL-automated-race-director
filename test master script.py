@@ -21,6 +21,7 @@ while(runvar):
     zerotime = street.checkfor0time(racedata, exceldocname)
 
     if zerotime == True:
+        
         racersraw = street.makeracers(racedata)
 
         racersupdated = street.giveroundpoints(racersraw)
@@ -28,15 +29,17 @@ while(runvar):
         racerssorted = street.firstsort(racersupdated[0])
 
         finallist = street.finalsort(racerssorted, racersupdated[1])
-
+            
         newdataframe = street.makedataframe(finallist, racedata)
-
+        
         street.exporttoxl(newdataframe, racedata, exceldocname)
-
+        
+        
     os.startfile(exceldocname)
 
     while(gobutton):
-        loopvar = gui.biggobutton(gobutton, runvar)
+        #loopvar = gui.biggobutton(gobutton, runvar)
+        loopvar = gui.pilotrankwidget(finallist = finallist)
         gobutton = loopvar[0]
         runvar = loopvar[1]
         if runvar == False:

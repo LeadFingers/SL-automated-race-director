@@ -1,8 +1,61 @@
 import tkinter as tk
+import pandas as pd
+import openpyxl as pxl
 
+def pilotrankwidget(finallist=[], testdoc = []):
+    title = 'Pilot standing widget'
+    
+    for index in range(0,32):
+        finallist.append('pilot' + str(index +1))
+        testdoc.append(str(index+1))
+    
+    
+    #Create an instance of Tkinter frame
+    win= tk.Tk()
 
+    #Set the geometry of Tkinter frame
+    win.geometry("600x950")
+    
+    #set window color
+    #win.configure(bg='light grey')
+    
+    #set the window title
+    win.title(title)
 
+    #import the background image
+    background = tk.PhotoImage( file= "images/pilotrank.png")
+    
+    #create canvas
+    width = 600
+    height = 950
+    mycanvas = tk.Canvas(win, width = width, height = height)
+    mycanvas.pack(fill = 'both', expand = True)
+    
+    #set image in canvas
+    mycanvas.create_image(0,0, image = background, anchor = 'nw')
+    
+    #add a label
+    textlines = '-----------------------------------------'
+    fillcolor = 'light gray'
+    for index in range(0,32):
+#         if index > 7:
+#             fillcolor = 'light gray'
+        mycanvas.create_text(width/16,25*index+130,text=finallist[index],
+                             font=("Arial 12 bold"),fill='light gray',anchor = 'nw')
+        mycanvas.create_text(width/16,25*index+142,text=textlines,
+                             font=("Arial 12"),fill='dark gray',anchor = 'nw')
+        mycanvas.create_text(width*8/16,25*index+130,text=testdoc[index],
+                             font=("Arial 12 bold"),fill='light gray',anchor = 'nw')
 
+        
+#     mycanvas.create_text(width/2, height/8, text = label1, font=("Arial 12 bold"), fill = 'light gray')
+#     mycanvas.create_text(width/2, height/4, text = label2, font=("Arial 12 bold"), fill = 'light gray')
+#     mycanvas.create_text(width/2, height/5, text = pilotnames, font=("Courier 8"), fill = 'light gray')
+
+    
+    win.mainloop()
+
+pilotrankwidget()
 
 def biggobutton(gobuttonstate = True, closeprogramstate = True):
     

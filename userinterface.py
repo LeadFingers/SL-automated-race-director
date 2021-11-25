@@ -2,7 +2,7 @@ import tkinter as tk
 import pandas as pd
 import openpyxl as pxl
 
-def pilotrankwidget(gobuttonstate = True, closeprogramstate = True, finallist = []):
+def pilotrankwidget(gobuttonstate = True, closeprogramstate = True, finallist = ['']):
     
     # this class is just for getting info out of the button
     class Buttonoutput(object):

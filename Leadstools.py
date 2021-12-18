@@ -1,194 +1,103 @@
+import tkinter as tk
 import pandas as pd
 import openpyxl as pxl
 
-
-
-# make all of the racer objects from the spreadsheet dataframe
-# outputs a dictionary with indexes 0 -> num of racers -1
-# the values are Racer class objects
-def makeracers(racedata): 
-    print('there are ', len(racedata), ' racers')
-    racerdic = {}
-    for row in range(len(racedata)):
-        pilotname = racedata.iloc[row]['pilot name']
-        pointtotal = racedata.iloc[row]['point total']
-        roundtime = racedata.iloc[row]['round time']
-        racerdic[row] = Racer(pilotname, roundtime, pointtotal, )
-        print(racerdic[row].name, racerdic[row].roundtime, racerdic[row].pointtotal, len(racedata))
-    print('--------------------------------')
-    return racerdic
-
-def giveroundpoints(racersraw):
-    workingdic = {}
-    workinglist = []
-    rankeddic = {}
-
-    for row in range(len(racersraw)):
-        #make racer dic with index = roundtime
-        workingdic[racersraw[row].roundtime] = racersraw[row]
-        #make a list of the index's 
-        workinglist.append(racersraw[row].roundtime)
-        
-    #sort the list of inexes
-    workinglist.sort()
-    print(workinglist)
-
-    for index in range(len(workinglist)):
-
-        rank = index+1
-        #update the Racer object with points for the round
-        workingdic[workinglist[index]].giveroundpointsrank(rank, len(workinglist))
-        #update the point total with the points from the round
-        workingdic[workinglist[index]].newrank()
-        #put the racers in order into the new dictionary
-        rankeddic[index] = workingdic[workinglist[index]]
-
-    for row in range(len(rankeddic)):
-        print(rankeddic[row].name,rankeddic[row].roundtime,
-              rankeddic[row].pointround, rankeddic[row].pointtotal)
-    print('-----------------------------------------')
-
-    return (rankeddic, workingdic)
-
-# a way to store the racers information
-class Racer(object): 
-    def __init__(self, name, roundtime, pointtotal):
-        self.name = name
-        self.roundtime = roundtime
-        self.pointround = 0
-        self.pointtotal = pointtotal
-        self.racerank = 0
-
-
-    def givepointround(self, rank): #allows you to change the points the pilot earned
-        self.pointround = rank
-        
-    def giveroundpointsrank(self, rank, howmany):
-        self.pointround = howmany - (rank-1)
-        
-        
-    def newrank(self): #updates the point total by adding it to the pilots rank
-        self.pointtotal += self.pointround
-
-#turns the final list into a properly formatted dataframe
-def makedataframe(finallist, testdoc):
-    data = []
-    columns = ['round number','pilot name','old points', 'old position', 'point total', 'round time']
-
-    for index in range(len(finallist)+2):
-        tinylist = [str(testdoc.at[0,'round number'] + 1), finallist[index].name, testdoc.at[index].pointtotal, index + 1,
-                    finallist[index].pointtotal, 0]
-        data.append(tinylist)
-
-    newdataframe = pd.DataFrame(data, columns = columns)
-    print(newdataframe)
-
-    return newdataframe
-
-#exports the properly formated dataframe to the next sheet on the selected excel doc
-def exporttoxl(newdataframe, testdoc, spreadsheetfile):
+def pilotrankwidget(gobuttonstate = True, closeprogramstate = True, finallist = ['']):
     
-    newround = 'round number ' + str(testdoc.at[0,'round number'] + 1)
-    
-    #testdoc.to_excel(spreadsheetfile, 'round 1', index = False)
-    
-    excel_book = pxl.load_workbook(spreadsheetfile)
-    with pd.ExcelWriter(spreadsheetfile, engine = 'openpyxl') as writer:
-        writer.book = excel_book
-        writer.sheets = {
-            worksheet.title: worksheet
-            for worksheet in excel_book.worksheets}
-        newdataframe.to_excel(writer, newround, index = False)
-
-
-
-#get the data from the spreadsheet and return it as a dataframe. also handles improperly formatted text
-#by trying to add the extension for you and if that fales forces you to make a new file name
-#using the maketxtfile() function
-def getxlsx(spreadsheet):
-    loopvar = True
-    easyfix = True 
-    while loopvar == True:
-        try:
-            sheet = pd.ExcelFile(spreadsheet)
-            loopvar = False
-            easyfix = True
-        except FileNotFoundError:
-            if easyfix == False:
-                loopvar = False
-            if easyfix == True:
-                spreadsheet += '.xlsx'
-                easyfix = False
-        finally:
-            if easyfix == False and loopvar == False:
-                print('that document ', spreadsheet, ' doesnt exist')
-                spreadsheet = maketxtfile(True)
-                loopvar = True
-                easyfix = True
-        
-    worksheet = len(sheet.sheet_names)-1
-    
-    racedata = pd.read_excel(spreadsheet, sheet_name = worksheet)
-    print(racedata)
-    print('length of the race data: ', len(racedata))
-    print('-----------------------------')
-    return (racedata, spreadsheet)
-
-
-#this function either reads or creats a txt document and returns whatever text is in there in a string
-#if correction is True it forces you to overwerite your text document with something new
-#this is to stop the getxlsx() function from throwing errors
-def maketxtfile(correction = False):  
-    try:
-        textfile = open('excel.doc.name.here.txt', 'x')
-        
-        exceldocname = input('enter the name of your excel document: ')
-        
-        with textfile as textfile:
-            textfile.write(exceldocname)
-        print('I made the txt file for you and put in your excel doc name')
-        textfile.close()
-    except:
-        textfile = open('excel.doc.name.here.txt', 'r+')
-        
-        exceldocname = textfile.read()
-        textfile.close()
-        
-        if exceldocname == '' or correction == True:
-            textfile = open('excel.doc.name.here.txt', 'w')
-            exceldocname = input('enter the name of your excel document: ')
+    # this class is just for getting info out of the button
+    class Buttonoutput(object):
+        def __init__(self, gobuttonstate, closeprogramstate):
+            self.gobuttonpress = gobuttonstate
+            self.closebuttonpress = closeprogramstate
+            self.dummytext = 0
             
-            with textfile as textfile:
-                textfile.write(exceldocname)
-        print('the file was already there')
+        def gobuttoninput(self):
+            self.gobuttonpress = not gobuttonstate
+        
+        def closeprograminput(self):
+            self.closebuttonpress = not closeprogramstate
+        #dummy function for testing modifying text in an open window
+        def dummygen(self):
+            self.dummytext += 1
+            
+            
+    #make the button output object
+    buttonanswer = Buttonoutput(gobuttonstate, closeprogramstate)    
+            
+    #for assigning data to the button output object
+    def gobuttonpress():
+        buttonanswer.gobuttoninput()
+    def closeprogram():
+        buttonanswer.closeprograminput()
+        
+    #title for the widget
+    title = 'Pilot standing widget'
     
-    print(exceldocname)
-    return exceldocname
+#     for index in range(0,32):
+#         finallist.append('pilot' + str(index +1))
+#         testdoc.append(str(index+1))  
+    
+    #Create an instance of Tkinter frame
+    win= tk.Tk()
 
-#getxlsx('thewrongname')
+    #Set the geometry of Tkinter frame
+    win.geometry("300x950")
+    
+    #set window color
+    #win.configure(bg='light grey')
+    
+    #set the window title
+    win.title(title)
 
-########### This has been added to "streetleagueheatmakerV2"
-# #this function checks if there are times entered for the 'round times' and asks the user if they want to
-# #keep going or kill the script. running the script with no pilot times breaks things
-# def checkfor0time(racedata):
-#     
-#     racertimelist = []
-#     racertimes = True
-#     missingtimelist = []
-#     for row in range(len(racedata)):
-#         if racedata.iloc[row]['round time'] == 0:
-#             racertimes = False
-#             missingtimelist.append(racedata.iloc[row]['pilot name'])
-#     
-#     if racertimes == False:
-#         answer = ''
-#         while answer !='y' or answer !='n': 
-#             print('It looks like you forgot to enter times for', missingtimelist)
-#             answer = input('having racer times of 0 can break the script, do you want to continue? y/n: ')
-#             
-#             if answer == 'n':
-#                 print('go fix your race times')
-#                 quit()
-#             if answer == 'y':
-#                 return
+    #import the background image
+    background = tk.PhotoImage( file= "images/pilotrank.png")
+    buttonimage = tk.PhotoImage(file = "images/button.png")
+    
+    #create canvas
+    width = 300
+    height = 950
+    mycanvas = tk.Canvas(win, width = width, height = height)
+    mycanvas.pack(fill = 'both', expand = True)
+    
+    #set image in canvas
+    mycanvas.create_image(0,0, image = background, anchor = 'nw')
+    
+    #add a label
+    textlines = '-------------------------------'
+    fillcolor = 'green'
+#     for index in range(len(finallist)):
+#         if index > 7:
+#             fillcolor = 'light gray'
+#         mycanvas.create_text(width*2/16,25*index+140,text=finallist[index].name,
+#                              font=("Arial 12 bold"),fill=fillcolor,anchor = 'nw')
+#         mycanvas.create_text(width*2/16,25*index+152,text=textlines,
+#                              font=("Arial 12"),fill='dark gray',anchor = 'nw')
+#         mycanvas.create_text(width*12/16,25*index+140,text=finallist[index].pointtotal,
+#                              font=("Arial 12 bold"),fill=fillcolor,anchor = 'nw')
 
+    #add buttons
+    button1 = tk.Button(win, image = buttonimage, borderwidth=0, text= "",width= 300, height = 136, command=
+              lambda:[gobuttonpress(), buttonanswer.dummygen(), makelabels(fillcolor)])
+    button2 = tk.Button(win, text= "close",width= 15, command=
+              lambda:[closeprogram(), win.destroy()])
+    button1window = mycanvas.create_window(width*8/16, 0, anchor = 'n', window = button1)
+    #button2window = mycanvas.create_window(width*9/16, height*30.5/32, anchor = 'nw', window = button2)
+
+# generate some dummy text to put into the widget
+    def makelabels(fillcolor):
+        mycanvas.create_image(0,0, image = background, anchor = 'nw')
+        for index in range(0,32):
+            if index > 7:
+                fillcolor = 'light gray'
+            mycanvas.create_text(width*2/16,25*index+140,text='this is line ' + str(index+1),
+                             font=("Arial 12 bold"),fill=fillcolor, anchor = 'nw')
+            mycanvas.create_text(width*2/16,25*index+152,text=textlines,
+                             font=("Arial 12"),fill='dark gray', anchor = 'nw')
+            mycanvas.create_text(width*12/16,25*index+140,text=str(buttonanswer.dummytext),
+                                 font=("Arial 12 bold"),fill=fillcolor,anchor = 'nw')
+
+    win.mainloop()
+    
+    return buttonanswer.gobuttonpress, buttonanswer.closebuttonpress
+
+pilotrankwidget()

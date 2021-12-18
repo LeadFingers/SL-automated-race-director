@@ -2,11 +2,19 @@
 import streetleagueheatmakerV2 as street
 import userinterface as gui
 import os
+import tkinter as tk
+import pandas as pd
+import openpyxl as pxl
 
-runvar = True
+# runvar = True
+# 
+# #initail variables for persistant scoreboard
+# gobuttonstate = True
+# closeprogramstate = True
 
-while(runvar):
-    gobutton = True
+# while(runvar):
+def main():
+#     gobutton = True
 
     #exceldocname = street.maketxtfile()
     exceldocname = street.maketxtfile()
@@ -21,7 +29,7 @@ while(runvar):
     zerotime = street.checkfor0time(racedata, exceldocname)
 
     if zerotime == True:
-        
+    
         racersraw = street.makeracers(racedata)
 
         racersupdated = street.giveroundpoints(racersraw)
@@ -37,10 +45,13 @@ while(runvar):
         
     os.startfile(exceldocname)
 
-    while(gobutton):
-        #loopvar = gui.biggobutton(gobutton, runvar)
-        loopvar = gui.pilotrankwidget(finallist = finallist)
-        gobutton = loopvar[0]
-        runvar = loopvar[1]
-        if runvar == False:
-            gobutton = False
+    return finallist
+
+#back to old master script
+#     while(gobutton):
+#         #loopvar = gui.biggobutton(gobutton, runvar)
+#         #loopvar = gui.pilotrankwidget(finallist = finallist)
+#         gobutton = loopvar[0]
+#         runvar = loopvar[1]
+#         if runvar == False:
+#             gobutton = False

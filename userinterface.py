@@ -186,11 +186,11 @@ def yesornowindow(label1 = '', label2 = '' ,pilotnames = [''],  title = ''):
     #create canvas
     width = 750
     height = 250
-    mycanvas = tk.Canvas(win, width = width, height = height)
+    mycanvas = tk.Canvas(win, width = width, height = height, bg = 'black')
     mycanvas.pack(fill = 'both', expand = True)
     
     #set image in canvas
-    mycanvas.create_image(0,0, image = background, anchor = 'nw')
+    #mycanvas.create_image(0,0, image = background, anchor = 'nw')
     
     #add a label
     mycanvas.create_text(width/2, height/8, text = label1, font=("Arial 12 bold"), fill = 'light gray')
@@ -219,7 +219,8 @@ def yesornowindow(label1 = '', label2 = '' ,pilotnames = [''],  title = ''):
 #               lambda:[clickno(), win.destroy()]).pack(padx = 100, side = 'right')
  
     win.mainloop()
-    
+    print('about to return yes or no')
     return buttonanswer.yesorno
+    pass
     
 #print(yesornowindow('enter name here'))

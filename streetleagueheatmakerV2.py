@@ -8,8 +8,49 @@ import os
 from tkinter import Tk     # from tkinter import Tk for Python 3.x
 from tkinter.filedialog import askopenfilename
 
+def exceldocisopen():
+    title = "WARNING!!!!!!!!!!  you're about to break shit"
+    label1 = 'It looks like theexcel doc is open: \n'
+    label3 = 'go save and close it dumbass '
+    label4 = ''
+    label2 = label3 + label4
 
-#branch test
+    pilotnames = '\n'
+
+    answer = gui.yesornowindow(False, label1, label2, title)
+    
+
+def checkforsametime(racedata, exceldocname):
+    racertimelist = []
+    racernamelist = []
+    
+    sametimelist = []
+    sametimelistnames = []
+    finderror = False
+    
+    for row in range(len(racedata)):
+        racernamelist.append(racedata.iloc[row]['pilot name'])
+        racertimelist.append(racedata.iloc[row]['round time'])
+        
+    for index in range(len(racedata)):
+        if racertimelist.count(racertimelist[index]) > 1:
+            print('two of these mfers have the same time')
+            sametimelistnames.append(racernamelist[index])
+            sametimelist.append(racertimelist[index])
+            finderror = True
+        
+    if finderror:
+            title = "WARNING!!!!!!!!!!  you're about to break shit"
+            label1 = 'It looks like these racers have the same times: \n'
+            label3 = 'Having racers with the same times can break the script, '
+            label4 = 'go fix it in the excel doc!!!!!'
+            label2 = label3 + label4
+            
+            pilotnames = str(sametimelistnames) + '\n'
+            
+            answer = gui.yesornowindow(exceldocname, label1, label2, pilotnames, title)
+    returnvar = not finderror
+    return returnvar   
 
 #this function checks if there are times entered for the 'round times' and asks the user if they want to
 #keep going or kill the script. running the script with no pilot times breaks things
@@ -32,12 +73,12 @@ def checkfor0time(racedata, exceldocname):
             title = "WARNING!!!!!!!!!!  you're about to break shit"
             label1 = 'It looks like you forgot to enter times for the following racers: \n'
             label3 = 'Having racer times of 0 can break the script, '
-            label4 = 'do you want to continue?'
+            label4 = 'go fix it in the excel doc!!!!!'
             label2 = label3 + label4
             
             pilotnames = str(missingtimelist) + '\n'
             
-            answer = gui.yesornowindow(label1, label2, pilotnames, title)
+            answer = gui.yesornowindow(exceldocname, label1, label2, pilotnames, title)
             
             if answer == 'n':
                 print('go fix your race times')

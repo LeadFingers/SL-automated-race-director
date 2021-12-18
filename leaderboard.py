@@ -15,9 +15,9 @@ def pilotrankwidget(gobuttonstate = True, closeprogramstate = True, finallist = 
         def gobuttoninput(self):
             self.gobuttonpress = not gobuttonstate
         
-        #dummy function for testing modifying text in an open window
-        def dummygen(self):
-            self.dummytext += 1
+#         #dummy function for testing modifying text in an open window
+#         def dummygen(self):
+#             self.dummytext += 1
             
             
     #make the button output object
@@ -70,7 +70,8 @@ def pilotrankwidget(gobuttonstate = True, closeprogramstate = True, finallist = 
 
     #add the button to the window
     button1 = tk.Button(win, image = buttonimage, borderwidth=0, text= "",width= 300, height = 136, command=
-              lambda:[gobuttonpress(), buttonanswer.dummygen(), makelabels(fillcolor)])
+              lambda:[gobuttonpress(), makelabels(fillcolor)])
+                #lambda:[gobuttonpress(), buttonanswer.dummygen(), makelabels(fillcolor)])
     button1window = mycanvas.create_window(width*8/16, 0, anchor = 'n', window = button1)
 
     #add the text to the window

@@ -27,8 +27,10 @@ def main():
     exceldocname = racedatatup[1]
 
     zerotime = street.checkfor0time(racedata, exceldocname)
+    
+    sametime = street.checkforsametime(racedata, exceldocname)
 
-    if zerotime == True:
+    if zerotime == True and sametime == True:
     
         racersraw = street.makeracers(racedata)
 
@@ -40,7 +42,12 @@ def main():
             
         newdataframe = street.makedataframe(finallist, racedata)
         
-        street.exporttoxl(newdataframe, racedata, exceldocname)
+        try:
+            street.exporttoxl(newdataframe, racedata, exceldocname)
+            
+        except PermissionError:
+            street.exceldocisopen() 
+            
         
         
     os.startfile(exceldocname)
